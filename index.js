@@ -5,6 +5,31 @@ const bestTime = document.getElementById("bestTime");
 
 
 let currentPB;
+let currentQuote = "";
+let solved = false;
+let currentQuoteArr = currentQuote.split('');
+let userInput = [];
+
+function aristocratCiphertext() {
+    
+    return fetch("quotes.json")
+    .then(response => response.json())
+    .then(quotes => {
+        const quote1 = quotes[Math.floor(Math.random() * quotes.length)];
+        return quote1.quote.toUpperCase();
+        
+    })
+
+}
+
+function isSolved(userInput, quoteArr) {
+    for (let i = 0; i < 26; i++) {
+        if (userInput[i] != quoteArr[i]) {
+            return false;
+        }
+    }
+    return true;
+}
 function solveTime() {
 
 }
@@ -15,9 +40,18 @@ function pbTime(currentPB) {
         bestTime.textContent = `Your current best time is ${currentPB}.`;
     }
 }
-function aristocratCipher() {
+
+
+
+function renderCipher(currentQuote) {
+    solved = false;
+
+
     
-    fetch("quotes.json")
-    .then(response => response.json())
-    .then()
 }
+
+// while (!solved) {
+//     currentquote = aristocratCiphertext();
+//     document.getElementById("startButton").onclick = renderCipher(currentQuote);
+
+// }

@@ -1,0 +1,11 @@
+.container {
+    text-align: center;
+}
+#startButton {
+    
+    text-align: center;
+    font-size: 2em;
+    border-radius: 10px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    cursor: pointer;
+}
