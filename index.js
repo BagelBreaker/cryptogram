@@ -8,17 +8,51 @@ let currentPB;
 let currentQuote = "";
 let solved = false;
 let currentQuoteArr = currentQuote.split('');
-let userInput = [];
+let userInput = "";
+let userArr = [];
+let quoteArr = [];
+let letters=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
-function aristocratCiphertext() {
+function shuffle(array) {
+    let currentIndex = array.length;
+  
+    // While there remain elements to shuffle...
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element...
+      let randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+    return array;
+}
+
+async function aristocratCiphertext() {
     
-    return fetch("quotes.json")
-    .then(response => response.json())
-    .then(quotes => {
-        const quote1 = quotes[Math.floor(Math.random() * quotes.length)];
-        return quote1.quote.toUpperCase();
-        
-    })
+    const quotes = await fetch("quotes.json").then(r => r.json());
+    let quote1 = quotes[Math.floor(Math.random() * quotes.length)].quote.toUpperCase();
+    quoteArr = shuffle([...letters]);
+
+
+    const cipherMap = {};
+    for (let i = 0; i < 26; i++) {
+      cipherMap[letters[i]] = quoteArr[i];
+    }
+  
+    // encrypt the quote
+    const encrypted = [...quote1].map(ch =>
+      /[A-Z]/.test(ch) ? cipherMap[ch] : ch
+    ).join("");
+  
+    // return results
+    return {
+      plain: quote1,
+      cipher: encrypted,
+      map: cipherMap
+    };
 
 }
 
@@ -55,3 +89,8 @@ function renderCipher(currentQuote) {
 //     document.getElementById("startButton").onclick = renderCipher(currentQuote);
 
 // }
+// aristocratCiphertext().then(({ plain, cipher, map }) => {
+//     console.log("Plain:", plain);
+//     console.log("Cipher:", cipher);
+//     console.log("Map:", map);
+//   });
