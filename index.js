@@ -77,12 +77,90 @@ function pbTime(currentPB) {
 
 
 
-function renderCipher(currentQuote) {
-    solved = false;
+// function renderCipher(quotex) {
+//     ciphertext.innerHTML = "";
+//     for (let i = 0; i < quotex.length; i++) {
+//         const
+
+//         if (quotex[i] == ' ') {
+
+//         }
+//     }
 
 
     
-}
+// }
+startButton.onclick = async () => {
+    const { plain, cipher, map } = await aristocratCiphertext();
+    currentQuote    = plain;
+    currentCipher   = cipher;
+    userArr         = Array(cipher.length).fill("");
+    renderCipher();
+  };
+  
+  function renderCipher() {
+
+    ciphertext.innerHTML = "";
+    bestTime.textContent = "";
+  
+
+    for (let i = 0; i < currentCipher.length; i++) {
+      const ch   = currentCipher[i];
+      const cell = document.createElement("span");
+      cell.className = "cell";
+      cell.style.display = "inline-block";
+      cell.style.margin = "0 .5em";
+      cell.style.textAlign = "center";
+  
+      if (/[A-Z]/.test(ch)) {
+
+        const top = document.createElement("div");
+        top.textContent = ch;
+        top.style.fontWeight = "bold";
+  
+
+        const input = document.createElement("input");
+        input.maxLength = 1;
+        input.style.width = "1em";
+        input.value = userArr[i] || "";
+  
+
+        const plainChar = currentQuote[i];
+        const guess     = input.value;
+        if (guess === "") {
+          input.style.borderColor = "";
+        } else if (guess === plainChar) {
+          input.style.borderColor = "green";
+        } else {
+          input.style.borderColor = "red";
+        }
+  
+
+        input.addEventListener("input", e => {
+          const v = e.target.value.toUpperCase().replace(/[^A-Z]/g, "");
+          for (let j = 0; j < currentCipher.length; j++) {
+            if (currentCipher[j] === ch) userArr[j] = v;
+          }
+          renderCipher();
+        });
+  
+        cell.appendChild(top);
+        cell.appendChild(input);
+      } else {
+        // space or punctuation
+        cell.textContent = ch;
+      }
+  
+      ciphertext.appendChild(cell);
+    }
+  
+
+    if (userArr.join("") === currentQuote) {
+      bestTime.textContent = "🎉 Congratulations! You solved this quote!";
+      return;  // stop here so the message isn’t immediately cleared
+    }
+  }
+  
 
 // while (!solved) {
 //     currentquote = aristocratCiphertext();
